@@ -1,0 +1,115 @@
+﻿@page "/"
+@using Backsplashed.Core.Abstractions
+
+<MatHeadline1>Backsplashed</MatHeadline1>
+
+<div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+
+            <p>
+                <MatHeadline5>Apply To</MatHeadline5>
+                <MatSelectItem @bind-Value="Target" Items="_wallpaperTargets" Label="Apply To"></MatSelectItem>
+            </p>
+            <p>
+                <MatHeadline5>Auto Update</MatHeadline5>
+                <MatSlideToggle @bind-Value="IsAutoUpdateEnabled" Label="@(GetEnabledLabel(IsAutoUpdateEnabled))"></MatSlideToggle><br />
+                <MatSelect HelperText="Helper Text" Label="Interval" @bind-Value="RefreshInterval">
+                    <MatOption TValue="int" Value="15">15 minutes</MatOption>
+                    <MatOption TValue="int" Value="30">30 minutes</MatOption>
+                    <MatOption TValue="int" Value="60">1 hours</MatOption>
+                    <MatOption TValue="int" Value="120">2 hours</MatOption>
+                    <MatOption TValue="int" Value="1440">24 hours</MatOption>
+                    <MatOption TValue="int" Value="0">Custom</MatOption>
+                </MatSelect>
+                <MatHeadline6>Update Notifications</MatHeadline6>
+                <MatSlideToggle @bind-Value="IsNotifyUpdateEnabled" Label="@(GetEnabledLabel(IsAutoUpdateEnabled))"></MatSlideToggle>
+            </p>
+            <p>
+                <MatHeadline5>Resolution</MatHeadline5>
+                <MatSelectItem @bind-Value="Resolution" Items="_monitorResolutions" Label="Resolution"></MatSelectItem>
+            </p>
+            <p>
+                <MatHeadline5>Categories</MatHeadline5>
+                <MatTextField @bind-Value="Categories" Label="Categories" HelperText="Use comma separated values" HelperTextPersistent="true" FullWidth="true"></MatTextField>
+            </p>
+            <p>
+                <MatButton Outlined="true" Icon="save">Save Changes</MatButton>
+                <MatButton Unelevated="true" Icon="refresh">Update Now</MatButton>
+            </p>
+        </div>
+        <style>
+            .demo-mat-card-container {
+                margin: 0 auto;
+            }
+
+            .demo-mat-card {
+                max-width: 400px;
+            }
+
+            .demo-mat-card-content {
+                padding: 1rem;
+            }
+ 
+            .demo-mat-card-clean-margin {
+                margin: 0px;
+            }
+        </style>
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-8 mat-layout-grid-cell-align-middle demo-mat-card-container">
+            <MatCard class="demo-mat-card">
+                <MatCardContent>
+                    <MatCardMedia Wide="true" @bind-ImageUrl="Src"></MatCardMedia>
+                    <div class="demo-mat-card-content">
+                        <MatHeadline6 class="demo-mat-card-clean-margin">
+                            Photo by <a href="https://unsplash.com/@@anniespratt?utm_source=your_app_name&utm_medium=referral">Annie Spratt</a> on <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>
+                        </MatHeadline6>
+                    </div>
+                </MatCardContent>
+                <MatCardActions>
+                    <MatCardActionIcons>
+                        <MatIconButton Icon="@MatIconNames.Save_alt"></MatIconButton>
+                        <MatIconButton Icon="@MatIconNames.Favorite"></MatIconButton>
+                    </MatCardActionIcons>
+                </MatCardActions>
+            </MatCard>
+        </div>
+    </div>
+</div>
+
+@code
+{
+
+    private string _categories;
+
+    public string Src { get; set; } = "https://source.unsplash.com/1600x900/?nature,water";
+    public int RefreshInterval { get; set; } = 15;
+    public string Resolution { get; set; } = MonitorResolution.FullHD;
+    public WallpaperTarget Target { get; set; } = WallpaperTarget.Both;
+    public bool IsAutoUpdateEnabled { get; set; } = false;
+    public bool IsNotifyUpdateEnabled { get; set; } = false;
+    public string Categories
+    {
+        get => _categories;
+        set
+        {
+            _categories = value;
+            StateHasChanged();
+        }
+    }
+
+    private readonly WallpaperTarget[] _wallpaperTargets = Enum.GetValues(typeof(WallpaperTarget)).Cast<WallpaperTarget>().ToArray();
+
+    private readonly string[] _monitorResolutions = {
+        MonitorResolution.FullHD,
+        MonitorResolution.DCI2K,
+        MonitorResolution.WideUXGA,
+        MonitorResolution.QuadHD,
+        MonitorResolution.Resolution3K, 
+        "Custom"
+    };
+
+    string GetEnabledLabel(bool val)
+    {
+        return val ? "Enabled" : "Disabled";
+    }
+}

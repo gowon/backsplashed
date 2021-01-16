@@ -1,0 +1,93 @@
+{
+    "Backsplashed.Interop.Commands.GetConfigurationSettings": {
+        "title": "GetConfigurationSettings",
+        "type": "object",
+        "additionalProperties": false
+    },
+    "Backsplashed.Interop.Commands.Ping": {
+        "title": "Ping",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "message"
+        ],
+        "properties": {
+            "message": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "$id": "Backsplashed.Interop.Commands.Ping"
+    },
+    "Backsplashed.Interop.Commands.RetrieveRandomPhotos": {
+        "title": "RetrieveRandomPhotos",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "term": {
+                "type": [
+                    "null",
+                    "string"
+                ]
+            },
+            "height": {
+                "type": "integer",
+                "format": "int32"
+            },
+            "width": {
+                "type": "integer",
+                "format": "int32"
+            }
+        }
+    },
+    "Backsplashed.Interop.Commands.SendWallpaperUpdatedToast": {
+        "title": "SendWallpaperUpdatedToast",
+        "type": "object",
+        "additionalProperties": false
+    },
+    "Backsplashed.Interop.Commands.UpdateConfigurationSettings": {
+        "title": "UpdateConfigurationSettings",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "terms",
+            "resolution",
+            "target",
+            "autoUpdateInterval",
+            "isAutoUpdateEnabled",
+            "isNotifyUpdateEnabled"
+        ],
+        "properties": {
+            "terms": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "resolution": {
+                "type": "string",
+                "minLength": 1
+            },
+            "target": {
+                "type": "integer",
+                "format": "int32"
+            },
+            "autoUpdateInterval": {
+                "type": "integer",
+                "format": "int32"
+            },
+            "isAutoUpdateEnabled": {
+                "type": "boolean"
+            },
+            "isNotifyUpdateEnabled": {
+                "type": "boolean"
+            }
+        },
+        "$id": "Backsplashed.Interop.Commands.UpdateConfigurationSettings"
+    },
+    "Backsplashed.Interop.Commands.UpdateWallpaper": {
+        "title": "UpdateWallpaper",
+        "type": "object",
+        "additionalProperties": false
+    }
+}

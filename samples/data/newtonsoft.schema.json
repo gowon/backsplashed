@@ -1,0 +1,97 @@
+{
+    "Backsplashed.Interop.Commands.GetConfigurationSettings": {
+        "$id": "Backsplashed.Interop.Commands.GetConfigurationSettings",
+        "type": "object"
+    },
+    "Backsplashed.Interop.Commands.Ping": {
+        "$id": "Backsplashed.Interop.Commands.Ping",
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            }
+        },
+        "required": [
+            "message"
+        ]
+    },
+    "Backsplashed.Interop.Commands.RetrieveRandomPhotos": {
+        "$id": "Backsplashed.Interop.Commands.RetrieveRandomPhotos",
+        "type": "object",
+        "properties": {
+            "term": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "height": {
+                "type": "integer"
+            },
+            "width": {
+                "type": "integer"
+            }
+        },
+        "required": [
+            "term",
+            "height",
+            "width"
+        ]
+    },
+    "Backsplashed.Interop.Commands.SendWallpaperUpdatedToast": {
+        "$id": "Backsplashed.Interop.Commands.SendWallpaperUpdatedToast",
+        "type": "object"
+    },
+    "Backsplashed.Interop.Commands.UpdateConfigurationSettings": {
+        "$id": "Backsplashed.Interop.Commands.UpdateConfigurationSettings",
+        "type": "object",
+        "properties": {
+            "terms": {
+                "$id": "System.String[]",
+                "type": [
+                    "array",
+                    "null"
+                ],
+                "items": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "resolution": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "target": {
+                "type": "integer"
+            },
+            "autoUpdateInterval": {
+                "type": "integer"
+            },
+            "isAutoUpdateEnabled": {
+                "type": "boolean"
+            },
+            "isNotifyUpdateEnabled": {
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "terms",
+            "resolution",
+            "target",
+            "autoUpdateInterval",
+            "isAutoUpdateEnabled",
+            "isNotifyUpdateEnabled"
+        ]
+    },
+    "Backsplashed.Interop.Commands.UpdateWallpaper": {
+        "$id": "Backsplashed.Interop.Commands.UpdateWallpaper",
+        "type": "object"
+    }
+}

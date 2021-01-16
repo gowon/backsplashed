@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MatBlazor" Version="2.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.1" PrivateAssets="all" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backsplashed.Core\Backsplashed.Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyToStaticServer" AfterTargets="AfterPublish">
+    <PropertyGroup>
+      <StaticServerDistDir>$(ProjectDir)\..\$(MSBuildProjectName).Embedded\Assets</StaticServerDistDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <DistFiles Include="$(PublishUrl)\wwwroot\**\*.*" />
+    </ItemGroup>
+
+    <Message Text="Removing contents from directory '$(StaticServerDistDir)'" />
+    <RemoveDir Directories="$(StaticServerDistDir)" />
+    <Message Text="Copying publish contents to directory '$(StaticServerDistDir)'" />
+    <Copy SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'$(StaticServerDistDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
+</Project>

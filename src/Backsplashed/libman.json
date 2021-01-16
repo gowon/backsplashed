@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "uuid@8.3.2",
+      "destination": "Assets/Scripts/uuid/8.3.2/"
+    },
+    {
+      "library": "d3-dispatch@1.0.3",
+      "destination": "Assets/Scripts/d3-dispatch/1.0.3/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "korzio/djvi@d85af06d54680016c0fea7e31fb71f7759b95c38",
+      "files": [
+        "djvi.js"
+      ],
+      "destination": "Assets/Scripts/djvi/d85af06/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "djv@2.1.4",
+      "destination": "Assets/Scripts/djv/2.1.4",
+      "files": [
+        "djv.js"
+      ]
+    }
+  ]
+}
