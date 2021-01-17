@@ -25,7 +25,7 @@
             {
                 var settings = new BacksplashedSettings
                 {
-                    Terms = new[] {"water", "forest"}
+                    Terms = "water,forest,mountain"
                 };
                 
                 await UpdateBacksplashedSettingsAsync(settings, cancellationToken);

@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/lib/open-iconic/1.1.1/",
+      "files": [
+        "sprite/**",
+        "font/**"
+      ]
+    }
+  ]
+}

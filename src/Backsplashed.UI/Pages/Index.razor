@@ -1,92 +1,132 @@
 ﻿@page "/"
 @using Backsplashed.Core.Abstractions
+@using Backsplashed.Core.Extensions
+@using Humanizer
 
-<MatHeadline1>Backsplashed</MatHeadline1>
-
-<div class="mat-layout-grid">
-    <div class="mat-layout-grid-inner">
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-
-            <p>
-                <MatHeadline5>Apply To</MatHeadline5>
-                <MatSelectItem @bind-Value="Target" Items="_wallpaperTargets" Label="Apply To"></MatSelectItem>
-            </p>
-            <p>
-                <MatHeadline5>Auto Update</MatHeadline5>
-                <MatSlideToggle @bind-Value="IsAutoUpdateEnabled" Label="@(GetEnabledLabel(IsAutoUpdateEnabled))"></MatSlideToggle><br />
-                <MatSelect HelperText="Helper Text" Label="Interval" @bind-Value="RefreshInterval">
-                    <MatOption TValue="int" Value="15">15 minutes</MatOption>
-                    <MatOption TValue="int" Value="30">30 minutes</MatOption>
-                    <MatOption TValue="int" Value="60">1 hours</MatOption>
-                    <MatOption TValue="int" Value="120">2 hours</MatOption>
-                    <MatOption TValue="int" Value="1440">24 hours</MatOption>
-                    <MatOption TValue="int" Value="0">Custom</MatOption>
-                </MatSelect>
-                <MatHeadline6>Update Notifications</MatHeadline6>
-                <MatSlideToggle @bind-Value="IsNotifyUpdateEnabled" Label="@(GetEnabledLabel(IsAutoUpdateEnabled))"></MatSlideToggle>
-            </p>
-            <p>
-                <MatHeadline5>Resolution</MatHeadline5>
-                <MatSelectItem @bind-Value="Resolution" Items="_monitorResolutions" Label="Resolution"></MatSelectItem>
-            </p>
-            <p>
-                <MatHeadline5>Categories</MatHeadline5>
-                <MatTextField @bind-Value="Categories" Label="Categories" HelperText="Use comma separated values" HelperTextPersistent="true" FullWidth="true"></MatTextField>
-            </p>
-            <p>
-                <MatButton Outlined="true" Icon="save">Save Changes</MatButton>
-                <MatButton Unelevated="true" Icon="refresh">Update Now</MatButton>
-            </p>
-        </div>
-        <style>
-            .demo-mat-card-container {
-                margin: 0 auto;
-            }
-
-            .demo-mat-card {
-                max-width: 400px;
-            }
-
-            .demo-mat-card-content {
-                padding: 1rem;
-            }
- 
-            .demo-mat-card-clean-margin {
-                margin: 0px;
-            }
-        </style>
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-8 mat-layout-grid-cell-align-middle demo-mat-card-container">
-            <MatCard class="demo-mat-card">
-                <MatCardContent>
-                    <MatCardMedia Wide="true" @bind-ImageUrl="Src"></MatCardMedia>
-                    <div class="demo-mat-card-content">
-                        <MatHeadline6 class="demo-mat-card-clean-margin">
-                            Photo by <a href="https://unsplash.com/@@anniespratt?utm_source=your_app_name&utm_medium=referral">Annie Spratt</a> on <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>
-                        </MatHeadline6>
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.Medium">
+    <MudGrid Spacing="6" Class="mt-16">
+        <MudItem xs="7">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudSelect Label="Apply To" @bind-Value="Settings.Target" HelperText="Specify which wallpaper targets get updated." OffsetY="true">
+                        @foreach (WallpaperTarget item in Enum.GetValues(typeof(WallpaperTarget)))
+                        {
+                            <MudSelectItem Value="@item">@item.GetDescription()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudText Typo="Typo.h6">Auto Update</MudText>
+                    <MudSwitch @bind-Checked="Settings.IsAutoUpdateEnabled" Color="Color.Primary">@(GetEnabledLabel(Settings.IsAutoUpdateEnabled))</MudSwitch>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudText Typo="Typo.h6">Notify on Update</MudText>
+                    <MudSwitch @bind-Checked="Settings.IsNotifyUpdateEnabled" Color="Color.Primary">@(GetEnabledLabel(Settings.IsNotifyUpdateEnabled))</MudSwitch>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSelect Label="Update Interval" @bind-Value="AutoUpdateIntervalPreset" OffsetY="true">
+                        @foreach (AutoUpdateIntervalPreset item in Enum.GetValues(typeof(AutoUpdateIntervalPreset)))
+                        {
+                            <MudSelectItem Value="@item">@item.GetDescription()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudHidden @bind-IsHidden="IsCustomUpdateIntervalHidden">
+                    <MudItem xs="12">
+                        <MudSlider @bind-Value="Settings.AutoUpdateInterval" Min="15" Max="1440" Variant="Variant.Filled">Update every @TimeSpan.FromMinutes(Settings.AutoUpdateInterval).Humanize(2)</MudSlider>
+                    </MudItem>
+                </MudHidden>
+                <MudItem Style="" xs="12">
+                    <MudSelect Label="Resolution" @bind-Value="ResolutionPreset" OffsetY="true" HelperText="Specify the minimum resolution of the images to be used.">
+                        @foreach (MonitorResolutionPreset item in Enum.GetValues(typeof(MonitorResolutionPreset)))
+                        {
+                            <MudSelectItem Value="@item">@item.GetDescription()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudHidden @bind-IsHidden="IsCustomResolutionHidden">
+                    <MudItem xs="6">
+                        <MudTextField Label="Custom Height" Variant="Variant.Filled" Value="@Settings.Resolution.Height" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="Custom Width" Variant="Variant.Filled" Value="@Settings.Resolution.Width" />
+                    </MudItem>
+                </MudHidden>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="Categories" Label="Categories" HelperText="Specify the search terms used to query for images. Use comma seperated values" />
+                </MudItem>
+                <MudItem xs="12" Class="d-flex justify-center">
+                    <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Default" Size="Size.Large" Class="mt-8" StartIcon="@Icons.Material.Save">Save Changes</MudButton>
+                    <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Info" Size="Size.Large" Class="mt-8" StartIcon="@Icons.Material.Refresh">Update Now</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        @*<MudItem xs="5">
+            <MudText Typo="Typo.h5" GutterBottom="true">Cart</MudText>
+            <MudPaper Class="d-flex flex-column" Style="height:100%;" Outlined="true">
+                <MudList Clickable="true">
+                    <MudListItem Icon="@Icons.Material.ContentCut">
+                        <div class="d-flex">
+                            <MudText>Scissor - Big</MudText>
+                            <MudText Inline="true" Class="ml-auto">$5</MudText>
+                        </div>
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.AirplanemodeActive">
+                        <div class="d-flex">
+                            <MudText>Model Airplane</MudText>
+                            <MudText Class="ml-auto">$20</MudText>
+                        </div>
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Create">
+                        <div class="d-flex">
+                            <MudText>Plastic Glue</MudText>
+                            <MudText Class="ml-auto">$12</MudText>
+                        </div>
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.ColorLens">
+                        <div class="d-flex">
+                            <MudText>Color set - Modern planes</MudText>
+                            <MudText Class="ml-auto">$16</MudText>
+                        </div>
+                    </MudListItem>
+                </MudList>
+                <div class="mt-auto">
+                    <MudDivider />
+                    <div class="d-flex pa-4">
+                        <MudText>Total:</MudText>
+                        <MudText Class="ml-auto"><b>$53</b></MudText>
                     </div>
-                </MatCardContent>
-                <MatCardActions>
-                    <MatCardActionIcons>
-                        <MatIconButton Icon="@MatIconNames.Save_alt"></MatIconButton>
-                        <MatIconButton Icon="@MatIconNames.Favorite"></MatIconButton>
-                    </MatCardActionIcons>
-                </MatCardActions>
-            </MatCard>
-        </div>
-    </div>
-</div>
+                </div>
+            </MudPaper>
+        </MudItem>*@
+    </MudGrid>
+</MudContainer>
 
 @code
 {
+    BacksplashedSettings Settings { get; set; } = new();
+
+    public MonitorResolutionPreset ResolutionPreset
+    {
+        get => Settings.ResolutionPreset;
+        set
+        {
+            Settings.ResolutionPreset = value;
+            ToggleCustomResolution();
+        }
+    }
+
+    public AutoUpdateIntervalPreset AutoUpdateIntervalPreset
+    {
+        get => Settings.AutoUpdateIntervalPreset;
+        set
+        {
+            Settings.AutoUpdateIntervalPreset = value;
+            ToggleCustomUpdateInterval();
+        }
+    }
 
     private string _categories;
-
-    public string Src { get; set; } = "https://source.unsplash.com/1600x900/?nature,water";
-    public int RefreshInterval { get; set; } = 15;
-    public string Resolution { get; set; } = MonitorResolution.FullHD;
-    public WallpaperTarget Target { get; set; } = WallpaperTarget.Both;
-    public bool IsAutoUpdateEnabled { get; set; } = false;
-    public bool IsNotifyUpdateEnabled { get; set; } = false;
     public string Categories
     {
         get => _categories;
@@ -97,19 +137,28 @@
         }
     }
 
-    private readonly WallpaperTarget[] _wallpaperTargets = Enum.GetValues(typeof(WallpaperTarget)).Cast<WallpaperTarget>().ToArray();
-
-    private readonly string[] _monitorResolutions = {
-        MonitorResolution.FullHD,
-        MonitorResolution.DCI2K,
-        MonitorResolution.WideUXGA,
-        MonitorResolution.QuadHD,
-        MonitorResolution.Resolution3K, 
-        "Custom"
-    };
-
     string GetEnabledLabel(bool val)
     {
         return val ? "Enabled" : "Disabled";
+    }
+
+    public bool IsCustomResolutionHidden { get; set; } = true;
+    public bool IsCustomUpdateIntervalHidden { get; set; }
+    
+
+    protected override void OnInitialized()
+    {
+        ToggleCustomResolution();
+        ToggleCustomUpdateInterval();
+    }
+
+    private void ToggleCustomResolution()
+    {
+        IsCustomResolutionHidden = Settings.ResolutionPreset != MonitorResolutionPreset.Custom;
+    }
+
+    private void ToggleCustomUpdateInterval()
+    {
+        IsCustomUpdateIntervalHidden = Settings.AutoUpdateIntervalPreset != AutoUpdateIntervalPreset.Custom;
     }
 }

@@ -5,6 +5,8 @@ namespace Backsplashed.UI
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using MudBlazor;
+    using MudBlazor.Services;
 
     public class Program
     {
@@ -18,6 +20,10 @@ namespace Backsplashed.UI
                 BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
             });
 
+            builder.Services.AddMudBlazorDialog();
+            builder.Services.AddMudBlazorSnackbar();
+            builder.Services.AddMudBlazorResizeListener();
+            
             await builder.Build().RunAsync();
         }
     }

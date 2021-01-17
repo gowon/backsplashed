@@ -6,7 +6,7 @@
     public class UpdateConfigurationSettings : IRequest<bool>
     {
         [Required]
-        public string[] Terms { get; set; }
+        public string Terms { get; set; }
 
         [Required]
         public string Resolution { get; set; }

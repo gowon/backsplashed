@@ -63,7 +63,7 @@
             {
                 Terms = request.Terms,
                 Target = (WallpaperTarget) request.Target,
-                Resolution = request.Resolution,
+                Resolution = MonitorResolution.FromString(request.Resolution),
                 IsAutoUpdateEnabled = request.IsAutoUpdateEnabled,
                 AutoUpdateInterval = request.AutoUpdateInterval,
                 IsNotifyUpdateEnabled = request.IsNotifyUpdateEnabled

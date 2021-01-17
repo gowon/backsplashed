@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MatBlazor" Version="2.8.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.1" PrivateAssets="all" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
+    <PackageReference Include="MudBlazor" Version="1.2.4" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <RemoveDir Directories="$(StaticServerDistDir)" />
     <Message Text="Copying publish contents to directory '$(StaticServerDistDir)'" />
     <Copy SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'$(StaticServerDistDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Message Text="Published app was copied to file:///$(StaticServerDistDir)" Importance="high" />
   </Target>
 
 </Project>

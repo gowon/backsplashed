@@ -46,8 +46,8 @@
             var now = DateTime.Now;
             var random = new Random(now.Millisecond);
             var backsplashedSettings = await _context.GetBacksplashedSettingsAsync(cancellationToken);
-            var term = backsplashedSettings.Terms[random.Next(backsplashedSettings.Terms.Length)];
-            var (height, width) = backsplashedSettings.Resolution.ToMonitorResolution();
+            var terms = backsplashedSettings.Terms.Split(',');
+            var term = terms[random.Next(terms.Length)];
             PhotoInfo info;
             
             // get random photo
@@ -72,9 +72,9 @@
                 while (results.Count == 0)
                 {
                     var photos = await _client.GetRandomPhotosAsync(
-                        query: backsplashedSettings.Terms[random.Next(backsplashedSettings.Terms.Length)], count: 30, orientation: Orientation.Landscape,
+                        query: terms[random.Next(terms.Length)], count: 30, orientation: Orientation.Landscape,
                         cancellationToken: cancellationToken);
-                    results = photos.Where(p => p.Width >= width && p.Height >= height)
+                    results = photos.Where(p => p.Width >= backsplashedSettings.Resolution.Width && p.Height >= backsplashedSettings.Resolution.Height)
                         .Select(p => p.ToPhotoInfo(term)).ToList();
                 }
 
